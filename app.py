@@ -1,3 +1,4 @@
+from pathlib import Path
 from flask import Flask, render_template
 from config import Config
 from models import db
@@ -18,6 +19,7 @@ def create_app():
     app.register_blueprint(applications_bp)
     app.register_blueprint(reports_bp)
     with app.app_context():
+        Path(app.instance_path).mkdir(parents=True, exist_ok=True)
         db.create_all()
 
     @app.get('/')
