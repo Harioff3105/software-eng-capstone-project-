@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from config import Config
 from models import db
-from routes.auth import auth_bp
+from routes.auth import auth_bp, current_user
 from routes.scholarships import scholarships_bp
 from routes.eligibility import eligibility_bp
 from routes.applications import applications_bp
@@ -23,6 +23,13 @@ def create_app():
     @app.get('/')
     def index():
         return render_template('index.html')
+
+    @app.get('/admin')
+    def admin_dashboard():
+        user = current_user()
+        if not user or user.role != 'admin':
+            return render_template('index.html')
+        return render_template('admin.html')
 
     @app.get('/health')
     def health():
